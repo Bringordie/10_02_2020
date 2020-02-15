@@ -1,6 +1,7 @@
 package rest;
 
 import entities.Movie;
+import facades.MovieFacade;
 import utils.EMF_Creator;
 import io.restassured.RestAssured;
 import static io.restassured.RestAssured.given;
@@ -66,8 +67,8 @@ public class MovieResourceTest {
     @BeforeEach
     public void setUp() {
         EntityManager em = emf.createEntityManager();
-        r1 = new Movie("Harry Potter", 8, 90, 2011);
-        r2 = new Movie("Gotham", 3, 120, 2020);
+        r1 = new Movie("Harry Potter", 8, 90, 2011, "Actor name");
+        r2 = new Movie("Gotham", 3, 120, 2020, "Actress name");
         try {
             em.getTransaction().begin();
             em.createNamedQuery("Movie.deleteAllRows").executeUpdate();
@@ -96,14 +97,61 @@ public class MovieResourceTest {
         .body("msg", equalTo("Hello World"));   
     }
     
-//    @Ignore
-//    @Test
-//    public void testCount() throws Exception {
-//        given()
-//        .contentType("application/json")
-//        .get("/movie/all").then()
-//        .assertThat()
-//        .statusCode(HttpStatus.OK_200.getStatusCode())
-//        .body("count", equalTo(2));   
-//    }
+    @Test
+    public void testMovieCount() throws Exception {
+        given()
+        .contentType("application/json")
+        .get("/movie/count").then()
+        .assertThat()
+        .statusCode(HttpStatus.OK_200.getStatusCode())
+        .body("count", equalTo(2));   
+    }
+    
+    @Test
+    public void allMovie() throws Exception {
+        MovieFacade mf = new MovieFacade();
+        //System.out.println("Print out: " + mf.getMovies());
+        given()
+        .contentType("application/json")
+        .get("/movie/all").then()
+        .assertThat()
+        .statusCode(HttpStatus.OK_200.getStatusCode())
+        .body("[0].actor", equalTo("Actor name"));   
+    }
+    
+    @Test
+    public void getMovieByName() throws Exception {
+        MovieFacade mf = new MovieFacade();
+        //System.out.println(mf.findByName("Gotham"));
+        given()
+        .contentType("application/json")
+        .get("/movie/name/Gotham").then()
+        .assertThat()
+        .statusCode(HttpStatus.OK_200.getStatusCode())
+        .body("name", equalTo("Gotham"));   
+    }
+    
+    @Ignore
+    //@Test
+    public void getMovieById() throws Exception {
+        MovieFacade mf = new MovieFacade();
+        System.out.println(mf.getMovieById(Long.valueOf(2)));
+        given()
+        .contentType("application/json")
+        .get("/movie/2").then()
+        .assertThat()
+        .statusCode(HttpStatus.OK_200.getStatusCode())
+        .body("name", equalTo("Harry Potter"));   
+    }
+    
+    @Test
+    public void getMovieById2() throws Exception {
+        MovieFacade mf = new MovieFacade();
+        //System.out.println(mf.getMovieById(Long.valueOf(12)));
+        given()
+        .contentType("application/json")
+        .get("/movie/2").then().log().body().assertThat().body("name", equalTo("Harry Potter"));  
+    }
+    
+    
 }

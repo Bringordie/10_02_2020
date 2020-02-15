@@ -60,9 +60,8 @@ public class FacadeExampleTest {
         try {
             em.getTransaction().begin();
             em.createNamedQuery("Movie.deleteAllRows").executeUpdate();
-            em.persist(new Movie("Harry Potter", 8, 90, 2011));
-            em.persist(new Movie("Gotham", 3, 120, 2020));
-            //(String name, int raiting, int runtime, int releaseyear)
+            em.persist(new Movie("Harry Potter", 8, 90, 2011, "Actor Name"));
+            em.persist(new Movie("Gotham", 3, 120, 2020, "Actress name"));
 
             em.getTransaction().commit();
         } finally {

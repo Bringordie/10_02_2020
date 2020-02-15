@@ -15,6 +15,8 @@ import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
+import com.google.gson.Gson;
+import javax.ws.rs.QueryParam;
 
 //Todo Remove or change relevant parts before ACTUAL use
 @Path("movie")
@@ -38,14 +40,49 @@ public class MovieResource {
     public String demo() {
         return "{\"msg\":\"Hello World\"}";
     }
+    
     @Path("/all")
     @GET
     @Produces({MediaType.APPLICATION_JSON})
-    public String getCount() {
+    public String getAll() {
         List<Movie> movies = FACADE.getMovies();
-        //System.out.println("--------------->"+count);
-        return "{\"Movie: \":"+movies.toString()+"}";  //Done manually so no need for a DTO
+        Gson gson = new Gson();
+        //return "{\"Movie: \":"+movies+"}";  
+        String json = gson.toJson(movies);
+        return json;
     }
-
- 
+    
+    @Path("/count")
+    @GET
+    @Produces({MediaType.APPLICATION_JSON})
+    public String getCount() {
+        long movies = FACADE.countOfMovies();
+        return "{\"count\":"+movies+"}";  
+    }
+    
+//    @GET
+//    @Path("/name/{name}")
+//    @Produces({MediaType.APPLICATION_JSON})
+//    public String getUserByID(@QueryParam("name") String name) {
+//        //Gson gson = new Gson();
+//        String json = GSON.toJson(FACADE.findByName(name));
+//        return json;
+//    }
+    
+    @GET
+    @Path("/name/{name}")
+    @Produces({MediaType.APPLICATION_JSON})
+    public String getUserByID(@PathParam("name") String name) {
+        //Gson gson = new Gson();
+        return GSON.toJson(FACADE.findByName(name));
+    }
+    
+    @GET
+    @Path("/{id}")
+    @Produces({MediaType.APPLICATION_JSON})
+    public String getUserByID(@PathParam("id") Long id) {
+        //Gson gson = new Gson();
+        return GSON.toJson(FACADE.getMovieById(id));
+    }
+    
 }

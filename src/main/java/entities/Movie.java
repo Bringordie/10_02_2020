@@ -17,9 +17,10 @@ public class Movie implements Serializable {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private String name;
-    private int raiting;
+    private int rating;
     private int runtime;
     private int releaseyear;
+    private String actor;
     
     public Movie() {
     }
@@ -33,11 +34,12 @@ public class Movie implements Serializable {
     }
     
 
-    public Movie(String name, int raiting, int runtime, int releaseyear) {
+    public Movie(String name, int rating, int runtime, int releaseyear, String actor) {
         this.name = name;
-        this.raiting = raiting;
+        this.rating = rating;
         this.runtime = runtime;
         this.releaseyear = releaseyear;
+        this.actor = actor;
     }
 
     public static long getSerialVersionUID() {
@@ -49,7 +51,7 @@ public class Movie implements Serializable {
     }
 
     public int getRaiting() {
-        return raiting;
+        return rating;
     }
 
     public int getRuntime() {
@@ -62,14 +64,9 @@ public class Movie implements Serializable {
 
     @Override
     public String toString() {
-        return "Movie{" + "id=" + id + ", name=" + name + ", raiting=" + raiting + ", runtime=" + runtime + ", releaseyear=" + releaseyear + '}';
+        return "Movie{" + "id=" + id + ", name=" + name + ", rating=" + rating + ", runtime=" + runtime + ", releaseyear=" + releaseyear + ", actor=" + actor + '}';
     }
 
-    
-    
-    
-    
-    
 
    
 }
